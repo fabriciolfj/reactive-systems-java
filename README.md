@@ -8,3 +8,5 @@
 - o aplicativo precisa usar código assíncrono e I/O não bloqueante
 - é essencial para fazer mais com recursos limitados
 - abordar uma arquitetura orientada a eventos
+
+## Funcionamento quarkus
