@@ -10,3 +10,13 @@
 - abordar uma arquitetura orientada a eventos
 
 ## Funcionamento quarkus
+- o start de um app quarkus é rapida devido:
+  - as peças necessárias na inicialização da app, são quebradas em partes pequenas
+  - com essas peças menores, o gradle ou maven utiliza eles durante o processo de compilação(build time), em vez de esperar o tempo de execução (runtime)
+  - utilizar essas classes (peças) durante o processo de construção, significa que elas não precisam ser incluídas na jvm em tempo de execução
+  - poupa tempo e memória
+  - isso é possível pois o quarkus, com suas extenções, constrói tudo em bytecode, equivalente as estruturas tradicionais.
+  - fazendo com que a jvm carregue as classes escritas em bytecode, sem custo de memória e de classes para fazer o trabalho de startup
+  - quarkus efetua a leitura de configuração, durante o processo de compilação
+  - otimiza o código do aplicativo e dependências
+
