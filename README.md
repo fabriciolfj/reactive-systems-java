@@ -20,3 +20,18 @@
   - quarkus efetua a leitura de configuração, durante o processo de compilação
   - otimiza o código do aplicativo e dependências
 
+# Nativo
+- O que é ser nativo? Significa que o código do aplicativo foi compilado para instruções de baixo nível, para um sistema operacional específico.
+- Anteriormente as aplicações java necessitavam de uma jvm, hoje não, graças ao projeto Graalvm
+
+## Etapas de construção não nativo
+- as etapas a abaixo, são necessárias para o processo de inicilização:
+  - aumento: construção de descriptors, annotations e classes da aplicação, gerando um bytecode contendo os metadados necessários. Essa fase é executada dentro de um processo de construção em uma jvm
+  - static initialization: executa todas as etapas, para capturar o bytecode
+  - runtime initilization: executa o principal método do aplicativo
+
+## Etapas de construção nativo
+- O que muda e a partir da static initilization salientada acima, onde:
+ - a inicialização static e realizada em 2 partes
+   - 1 inicialização estática e feita junto com a etapa de construção do bytecode
+   - 2 retira-se as classes que foram utilizadas no processo de construção (não necessárias no app), do executável nativo.
