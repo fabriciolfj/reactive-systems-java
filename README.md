@@ -20,3 +20,6 @@
   - quarkus efetua a leitura de configuração, durante o processo de compilação
   - otimiza o código do aplicativo e dependências
 
+# Nativo
+- O que é ser nativo? Significa que o código do aplicativo foi compilado para instruções de baixo nível, para um sistema operacional específico.
+- Anteriormente as aplicações java necessitavam de uma jvm, hoje não, graças ao projeto Graalvm
