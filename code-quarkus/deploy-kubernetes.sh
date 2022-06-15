@@ -1,0 +1,1 @@
+mvn clean install -Dquarkus.kubernetes.deploy=true
