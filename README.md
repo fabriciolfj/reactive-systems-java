@@ -78,3 +78,13 @@
 - segunda camada -> fornece apis de alto nível, para usar e escrever seu código
 - camada superior -> temos a nossa aplicação
 - obs: nunca bloqueie uma thread, pois isso trava todo o loop de eventos.
+
+# Projeto loom
+- adiciona o conceito de threads virtuais
+- uma única thread pode ter milhares de threads virtuais
+- o projeto loom gerencia a thread virtual e ele não bloqueia a thread principal
+- como funciona:
+  - você programa de forma síncrona
+  - em background o código bloqueante e delegado a uma thread virtual
+  - se esse código chama outro serviço bloqueante, a thread virtual fica em standby e é delegada a outra thread virtual responsável por aguardar a resposta
+  - com a reposta é encaminhada a thread virtual e essa encaminha a thread principal. 
