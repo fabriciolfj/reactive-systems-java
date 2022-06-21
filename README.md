@@ -37,6 +37,7 @@
    - 2 retira-se as classes que foram utilizadas no processo de construção (não necessárias no app), do executável nativo.
 
 # Mensagens assíncronas e eventos
+- passagem de mensagens é a essência dos sistemas reativos
 - mensagens assíncronas e eventos, nem sempre são a mesma coisa.
 
 #### Evento
@@ -49,3 +50,7 @@
 #### Mensagem assíncrona
 - mensagem é uma estrutura de dados que descreve o evento, e quaisquer detalhes relevantes sobre o mesmo, como: quem emitiu, em que momento e etc.
 - mensagens também podemos transmitir comandos, ou seja, ações.
+
+# Dissociação do tempo
+- a possibilidade de um componente emitir mensagens ao broker, sem se preocupar quando serão consumidas
+- pode ocorrer do consumidor da mensagem estar indisponível, no entanto quando uma instância ficar up, este receberam os eventos
