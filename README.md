@@ -56,3 +56,15 @@
 # Dissociação do tempo
 - a possibilidade de um componente emitir mensagens ao broker, sem se preocupar quando serão consumidas
 - pode ocorrer do consumidor da mensagem estar indisponível, no entanto quando uma instância ficar up, este receberam os eventos
+
+# Sem bloqueio
+- a troca de mensagens deve ser eficiente, ou seja, sem bloqueio de threads
+- a criação e gerenciamento de threads para lidar com requisições (de forma assíncrona), não é eficiente, pois isso carreta:
+  - aumento de consumo de cpu
+  - demora no processamento devido I/O
+  - se limita ao número de threads que você pode criar
+
+## IO não bloqueante
+- as solicitações são enfileiradas, e processadas no futuro
+- quando estiver pronto o processamento, emite-se uma resposta ao requisitante.
+- podemos utilizar 1 threads para lidar com várias solicitações
