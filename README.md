@@ -38,6 +38,8 @@
 
 # Mensagens assíncronas e eventos
 - passagem de mensagens é a essência dos sistemas reativos
+- através da passagem de mensagens, conseguimos: elasticidade, resiliência e responsividade.
+- promove o desacoplamento do espaço e tempo, tornando o sistema mais robusto
 - mensagens assíncronas e eventos, nem sempre são a mesma coisa.
 
 #### Evento
