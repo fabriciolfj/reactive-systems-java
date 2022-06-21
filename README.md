@@ -67,7 +67,7 @@
 ## IO não bloqueante
 - as solicitações são enfileiradas, e processadas no futuro
 - quando estiver pronto o processamento, emite-se uma resposta ao requisitante.
-- podemos utilizar 1 threads para lidar com várias solicitações
+- podemos utilizar 1 thread para lidar com várias solicitações
 - recomenda-se utilizar o pattern reactor, onde:
   -  recebe-se os eventos de vários canais
   -  os distribui sequencialmente para os manipuladores de eventos correspondentes.
