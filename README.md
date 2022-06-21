@@ -68,3 +68,13 @@
 - as solicitações são enfileiradas, e processadas no futuro
 - quando estiver pronto o processamento, emite-se uma resposta ao requisitante.
 - podemos utilizar 1 threads para lidar com várias solicitações
+- recomenda-se utilizar o pattern reactor, onde:
+  -  recebe-se os eventos de vários canais
+  -  os distribui sequencialmente para os manipuladores de eventos correspondentes.
+  -  quando é concluída a execução, outro loop de eventos é registrado para dar a resposta a outro manipulador
+   
+### Detalhando o pattern reactor
+- camada inferior -> implementa o modelo de loop de eventos, lida e gerencia a parte de I/O não bloqueante
+- segunda camada -> fornece apis de alto nível, para usar e escrever seu código
+- camada superior -> temos a nossa aplicação
+- obs: nunca bloqueie uma thread, pois isso trava todo o loop de eventos.
