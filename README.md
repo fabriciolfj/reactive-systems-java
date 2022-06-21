@@ -35,3 +35,17 @@
  - a inicialização static e realizada em 2 partes
    - 1 inicialização estática e feita junto com a etapa de construção do bytecode
    - 2 retira-se as classes que foram utilizadas no processo de construção (não necessárias no app), do executável nativo.
+
+# Mensagens assíncronas e eventos
+- mensagens assíncronas e eventos, nem sempre são a mesma coisa.
+
+#### Evento
+- evento representa um fato, algo que aconteceu. ex: toque de tecla, uma falha e etc. Pode ser o resultado de um comando.
+  - imagine uma resposta http, esse é um evento
+  - o evento pode ser transmitido para interessados, saber o que aconteceu.
+  - eventos são imutáveis, ou seja, não posso excluir
+  - para refutar um fator, preciso disparar outro evento invalidando-o 
+
+#### Mensagem assíncrona
+- mensagem é uma estrutura de dados que descreve o evento, e quaisquer detalhes relevantes sobre o mesmo, como: quem emitiu, em que momento e etc.
+- mensagens também podemos transmitir comandos, ou seja, ações.
