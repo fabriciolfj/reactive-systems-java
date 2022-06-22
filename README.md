@@ -88,3 +88,11 @@
   - em background o código bloqueante e delegado a uma thread virtual
   - se esse código chama outro serviço bloqueante, a thread virtual fica em standby e é delegada a outra thread virtual responsável por aguardar a resposta
   - com a reposta é encaminhada a thread virtual e essa encaminha a thread principal. 
+
+# Programação reativa
+- combina a programação funcional, o padrão observer e o padrão iterável
+- observamos um fluxo e reage sobre ele
+
+## Operadores
+- operadores na programação reativa, retornam novos fluxos (streams)
+- ele observa o fluxo anterior e cria um novo combinando sua lógico sobre os eventos recebidos
