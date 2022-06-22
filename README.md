@@ -93,6 +93,12 @@
 - combina a programação funcional, o padrão observer e o padrão iterável
 - observamos um fluxo e reage sobre ele
 
+## Fluxos reativos
+- fluxos reativos vão emitir os eventos, quando alguem os assina (subscribe)
+- apó a assinatura este envia os eventos (items), falha (caso não tenha um fallback, após a falha novos itens não serão emitidos) e conclusão (quando não há mais itens a serem enviados).
+- o fluxos a serem observados ou assinativos, chamamos de upstream, ou fluxo com eventos originais
+- o fluxo resultando é chamado de downstream, ou seja, fluxo recebido/transformado ou modificado.
+
 ## Operadores
 - operadores na programação reativa, retornam novos fluxos (streams)
 - ele observa o fluxo anterior e cria um novo combinando sua lógico sobre os eventos recebidos
