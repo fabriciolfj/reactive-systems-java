@@ -102,3 +102,16 @@
 ## Operadores
 - operadores na programação reativa, retornam novos fluxos (streams)
 - ele observa o fluxo anterior e cria um novo combinando sua lógico sobre os eventos recebidos
+
+## Entidades participantes
+- publisher -> quem emite os itens, os eventos
+- subscriber -> quem assina o editor ou seja, o publisher, que receberá os eventos
+- item ou evento -> contrato que é emitido pelo publisher aos subscribers
+- subscriptions -> assinatura ou vinculo do assinante ao publicador
+- processor -> ligação entre assinante e publicador, é por ele que ambos se comunicam
+
+### backpressure
+- macanismo para não sobrecarregar assinantes lentos
+- existem situações onde o publisher emite eventos
+rapidamente, mas o assinante não consegui consumir na mesma velocidade
+- desta forma o assinante precisa comunicar ao publisher, sua capacidade de consumo, solicitando mais itens quando esta for processada
