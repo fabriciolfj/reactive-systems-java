@@ -5,25 +5,26 @@ import io.smallrye.mutiny.Multi;
 public class StreamsExample {
 
     public static void main(String[] args) {
-        final Multi<String> streams = Multi.createFrom().items("a", "b", "c", "d", "e", "f");
+        final Multi<String> dados = Multi.createFrom().items("a", "b", "c", "d", "e");
 
-        streams.onItem()
-                .transform(s -> toSquare(s))
-                .onFailure()
-                .recoverWithItem(e -> getFallback(e))
+        dados.onItem()
+                .transform(StreamsExample::toSquare)
+                .onFailure().recoverWithItem(StreamsExample::getFallback)
                 .subscribe()
                 .with(
-                        item -> System.out.println(item),
-                        err -> System.out.println(err.getMessage()),
+                        value -> System.out.println(value),
+                        err -> System.out.println(err),
                         () -> System.out.println("complete")
                 );
+
+
     }
 
     private static String toSquare(final String circle) {
         if (circle.equals("d")) {
             throw new RuntimeException("teste error");
         }
-        return circle;
+        return circle.toUpperCase();
     }
 
     private static String getFallback(final Throwable failure) {
