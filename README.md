@@ -89,9 +89,30 @@
   - se esse código chama outro serviço bloqueante, a thread virtual fica em standby e é delegada a outra thread virtual responsável por aguardar a resposta
   - com a reposta é encaminhada a thread virtual e essa encaminha a thread principal. 
 
+# Programação imperativa
+- uma sequencia de comandos com objetivo de gerar um resultado
+- cada thread so pode realizar uma solicitação
+- em operações de I/O, a thread fica aguardando resposta, ou seja, ociosa.
+- devido ao bloqueio de threads, minha aplicação tem um número reduzido de solicitações
+- alto volume de recursos alocados para buffer, onde ficam as solicitações que estão aguardando, a thread ser liberada para uso
+
 # Programação reativa
 - combina a programação funcional, o padrão observer e o padrão iterável
 - observamos um fluxo e reage sobre ele
+
+## Diferença entre programação reativa e imperativa
+- programação reativa parte do principio da continuação, ou seja, tudo seja assíncrono
+- podemos receber mais solicitações
+- aumento do nível de concorrência
+- para o modelo reativo, precisamos separar o código e pequenas partes
+- o entendimento da aplicação, fica mais dificil no modelo reativo
+
+## Unificando programação reativa e imperativa em quarkus
+- quando construimos uma aplicação em quarkus, podemos escrever programação reativa e imperativa
+- o motor reativo Vert.x (motor utilizado pelo quarkus), possui uma camada de roteamento, onde:
+  - caso a programação seja reativa, envie para a camada de I/O
+  - caso a programação seja imperativa, envie para thread bloqueante, continue o processamento e depois essa thread notifica sua conclusão, convocando um manipulador de eventos para dar continuação
+
 
 ## Fluxos reativos
 - fluxos reativos vão emitir os eventos, quando alguem os assina (subscribe)
