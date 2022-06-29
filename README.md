@@ -136,3 +136,21 @@
 - existem situações onde o publisher emite eventos
 rapidamente, mas o assinante não consegui consumir na mesma velocidade
 - desta forma o assinante precisa comunicar ao publisher, sua capacidade de consumo, solicitando mais itens quando esta for processada
+
+# Mutiny
+- api reativa utilizada pelo quarkus
+- foi criada com objetivo de ser mais compreensível que as outras apis de mercado, como reactor ou rxjava
+- o motor do quarkus por padrão é reactivo e utiliza o vert.x, onde o mutiny é uma camada acima que lida com esse motor, expondo apis chamada: Uni e Multi
+  - Uni -> emite 0 ou 1 evento
+  - Multi -> emite 0 ou N eventos
+  - ambos os eventos de falha são terminas e claro o complete.
+  - Exemplo abaixo de uso:
+
+````
+getAllUsers()
+       .onItem()
+       .transform(user -> user.name().toLowerCase())
+       .select().where(name -> name.startsWith("s"))
+       .collect().asList()
+       .subscribe().with(System.out::println);
+````
