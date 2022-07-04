@@ -154,3 +154,7 @@ getAllUsers()
        .collect().asList()
        .subscribe().with(System.out::println);
 ````
+
+## Controle de fluxo
+### Grupo onOverflow
+- quando o número de eventos emitidos é maior que o número de eventos solicitados pelo assinante, Multi emite um estouro
