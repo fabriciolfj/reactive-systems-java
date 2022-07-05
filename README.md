@@ -158,3 +158,11 @@ getAllUsers()
 ## Controle de fluxo
 ### Grupo onOverflow
 - quando o número de eventos emitidos é maior que o número de eventos solicitados pelo assinante, Multi emite um estouro
+
+### invoke (invocação)
+- para observar eventos
+- ideal para registrar logs
+- não modifica o evento
+
+### transforming
+- ao contrário do invoke, este modifica os eventos e envio o resultado para o assinante downstream.
