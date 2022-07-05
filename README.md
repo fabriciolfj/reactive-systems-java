@@ -194,5 +194,5 @@ getAllUsers()
     }
 ```
 
-### Combinando e juntando items
+### Combine
 - Quando temos 2 fluxos e estes são executados sequencialmente, mas um independe do outro.
