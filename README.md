@@ -170,3 +170,8 @@ getAllUsers()
   - transformtoMulti
   - transformToUni
   - transformtoMultiAndConcatenate 
+
+### failure
+- falha é um evento terminal, ou seja, após este o evento complete e emitido
+- no caso do Multi, os demais eventos não serão recebidos
+- no Uni, este será substituido pelo evento de fallback para lidar com a falha
