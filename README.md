@@ -175,3 +175,21 @@ getAllUsers()
 - falha é um evento terminal, ou seja, após este o evento complete e emitido
 - no caso do Multi, os demais eventos não serão recebidos
 - no Uni, este será substituido pelo evento de fallback para lidar com a falha
+- para chamar o invoke ou retry, tem que ser antes da tratativa do erro, conforme o exemplo abaixo:
+```
+    private static void addUser() {
+        Uni.createFrom()
+                .item(new User(null))
+                .onItem().transform(s -> s.testFail())
+                .onFailure().invoke(e -> System.out.println("Ocorreu a falha: " + e.getMessage()))
+                .onFailure().retry().atMost(3)
+                .onFailure().recoverWithItem(
+                        err -> "Usuario não inserido: " + err
+                                .getMessage())
+                .subscribe()
+                .with(
+                        item -> System.out.println(item),
+                        err -> System.out.println(err)
+                );
+    }
+```
