@@ -166,3 +166,7 @@ getAllUsers()
 
 ### transforming
 - ao contrário do invoke, este modifica os eventos e envio o resultado para o assinante downstream.
+- Existem algums transforming análogo ao flatmap, como:
+  - transformtoMulti
+  - transformToUni
+  - transformtoMultiAndConcatenate 
