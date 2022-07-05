@@ -136,3 +136,60 @@
 - existem situações onde o publisher emite eventos
 rapidamente, mas o assinante não consegui consumir na mesma velocidade
 - desta forma o assinante precisa comunicar ao publisher, sua capacidade de consumo, solicitando mais itens quando esta for processada
+
+# Mutiny
+- api reativa utilizada pelo quarkus
+- foi criada com objetivo de ser mais compreensível que as outras apis de mercado, como reactor ou rxjava
+- o motor do quarkus por padrão é reactivo e utiliza o vert.x, onde o mutiny é uma camada acima que lida com esse motor, expondo apis chamada: Uni e Multi
+  - Uni -> emite 0 ou 1 evento
+  - Multi -> emite 0 ou N eventos
+  - ambos os eventos de falha são terminas e claro o complete.
+  - Exemplo abaixo de uso:
+
+````
+getAllUsers()
+       .onItem()
+       .transform(user -> user.name().toLowerCase())
+       .select().where(name -> name.startsWith("s"))
+       .collect().asList()
+       .subscribe().with(System.out::println);
+````
+
+## Controle de fluxo
+### Grupo onOverflow
+- quando o número de eventos emitidos é maior que o número de eventos solicitados pelo assinante, Multi emite um estouro
+
+### invoke (invocação)
+- para observar eventos
+- ideal para registrar logs
+- não modifica o evento
+
+### transforming
+- ao contrário do invoke, este modifica os eventos e envio o resultado para o assinante downstream.
+- Existem algums transforming análogo ao flatmap, como:
+  - transformtoMulti
+  - transformToUni
+  - transformtoMultiAndConcatenate 
+
+### failure
+- falha é um evento terminal, ou seja, após este o evento complete e emitido
+- no caso do Multi, os demais eventos não serão recebidos
+- no Uni, este será substituido pelo evento de fallback para lidar com a falha
+- para chamar o invoke ou retry, tem que ser antes da tratativa do erro, conforme o exemplo abaixo:
+```
+    private static void addUser() {
+        Uni.createFrom()
+                .item(new User(null))
+                .onItem().transform(s -> s.testFail())
+                .onFailure().invoke(e -> System.out.println("Ocorreu a falha: " + e.getMessage()))
+                .onFailure().retry().atMost(3)
+                .onFailure().recoverWithItem(
+                        err -> "Usuario não inserido: " + err
+                                .getMessage())
+                .subscribe()
+                .with(
+                        item -> System.out.println(item),
+                        err -> System.out.println(err)
+                );
+    }
+```
