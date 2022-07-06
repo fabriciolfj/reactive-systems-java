@@ -202,4 +202,13 @@ getAllUsers()
 - Existe o:
   - select().where sincrono
   - select().when assíncrono
-  - select().distinct (elimita os duplicados e não é aplicado a fluxos infinitos), 
+  - select().distinct (elimita os duplicados e não é aplicado a fluxos infinitos),
+
+# Http reativa
+- Por padrão as requisições http no quarkus não são bloqueantes, pois faz uso do seu motor vert.x.
+- Como funciona uma requisição em quarkus:
+  - servidor recebe a requisição http
+  - delega ao quarkus processar essa requisição -> nesse ponto entra em ação a camada de roteamento, que direciona a requisição ao motor reactivo quarkus
+  - o quarkus verifica se tem algum interceptador para lidar com segurança ou logs
+  - procura o método para lidar com a requisição, com base no path/verbo http presente na mesma
+  - ao achar o método, manda processar 
