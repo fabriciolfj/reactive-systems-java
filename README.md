@@ -199,4 +199,7 @@ getAllUsers()
 
 ### Select
 - selecione itens de um Multi, e descarta aqueles que não correspondem ao predicate.
-- Existe o select().where sincrono, select().when assíncrono, select().distinct (elimita os duplicados e não é aplicado a fluxos infinitos), select().skip.
+- Existe o:
+  - select().where sincrono
+  - select().when assíncrono
+  - select().distinct (elimita os duplicados e não é aplicado a fluxos infinitos), 
