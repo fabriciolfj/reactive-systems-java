@@ -10,7 +10,7 @@ public class UniApi {
                 .getAllUsers()
                 .select().where(user -> user.name().equals("Fabricio"))
                 .toUni()
-                .onFailure().recoverWithItem(new User("Error"))
+                .onFailure().recoverWithItem(new User(1, "Error"))
                 .subscribe()
                 .with(s -> System.out.println(s.name()),
                         err ->  System.out.println(err)

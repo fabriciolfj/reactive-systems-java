@@ -13,7 +13,7 @@ public class FailureTest {
 
     private static void addUser() {
         Uni.createFrom()
-                .item(new User(null))
+                .item(new User(1, null))
                 .onItem().invoke(e -> System.out.println("Evento emitido"))
                 .onItem().transform(s -> s.testFail())
                 .onFailure().invoke(e -> System.out.println("Ocorreu a falha: " + e.getMessage()))
