@@ -212,3 +212,6 @@ getAllUsers()
   - o quarkus verifica se tem algum interceptador para lidar com segurança ou logs
   - procura o método para lidar com a requisição, com base no path/verbo http presente na mesma
   - ao achar o método, manda processar 
+  
+- Podemos verificar a pontuação da nossa api, quanto maior mais disponibilidade para ser utilizada será: http://localhost:8080/q/dev/io.quarkus.quarkus-resteasy-reactive/scores
+- outro ponto, para eventos infinitos, utilize o @Produces(MediaType.SERVER_SENT_EVENTS)
