@@ -215,3 +215,13 @@ getAllUsers()
   
 - Podemos verificar a pontuação da nossa api, quanto maior mais disponibilidade para ser utilizada será: http://localhost:8080/q/dev/io.quarkus.quarkus-resteasy-reactive/scores
 - outro ponto, para eventos infinitos, utilize o @Produces(MediaType.SERVER_SENT_EVENTS)
+
+### Acesso a base de dados
+- atualmente o acesso a base de dados, utilizando jdbc, bloqueia a thread participante até que a base de dados de algum retorno
+- isso implica algums problemas, como:
+  - por mais que tenhamos configurado um pool de conexões (várias threads para acessar a base de dados), dependente do volume de acesso, não teremos mais threads para acessar a base de dados
+  - latência de rede, implicando na baixa performance da nossa aplicação.
+  
+### Acesso a base de dados de forma reativa
+- nessa situação uma conexão pode prover acesso a base de dados, para vários usuários
+- quando em uma conexão é
