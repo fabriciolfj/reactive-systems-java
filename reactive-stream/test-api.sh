@@ -1,0 +1,1 @@
+wrk -t 10 -c50 -d40s http://localhost:8080/api/v1/hello/blocking
