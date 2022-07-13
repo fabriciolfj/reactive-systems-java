@@ -223,5 +223,9 @@ getAllUsers()
   - latência de rede, implicando na baixa performance da nossa aplicação.
   
 ### Acesso a base de dados de forma reativa
-- nessa situação uma conexão pode prover acesso a base de dados, para vários usuários
-- quando em uma conexão é
+- nessa situação uma conexão (thread) pode prover acesso a base de dados, para vários usuários
+- não é bloqueio da thread de conexão
+- o hibernate reactive provê todos os recursos que existem atualmente, que facilitam a o mapeamento relacional das classes com as tabelas no banco de dados, mas apresenta uma nova camada reativa, no qual utilizamos para programar de forma assíncrona.
+- o hibernate reactive do quarkus, vem em conjunto com o Panache, que podemos utilizar de duas formas:
+  - repository: similar ao Spring Data, onde temos uma classe que cuida da iteração com a base de dados (sugerido)
+  - entity: a entidade gerencia e provê os métodos de iteração com a base de dados
