@@ -40,7 +40,7 @@ public class CustomerController {
                         .onItem()
                         .ifNotNull().invoke(r -> r.name = customer.name)
                         .onItem().ifNotNull().transform(r -> Response.accepted().entity(r).build())
-                        .onItem().ifNull().continueWith(Response.ok().status(404).build()));
+                        .onItem().ifNull().failWith(new WebApplicationException("Customer not found: " + id, Response.Status.NOT_FOUND)));
     }
 
     @POST
