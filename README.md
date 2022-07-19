@@ -229,3 +229,8 @@ getAllUsers()
 - o hibernate reactive do quarkus, vem em conjunto com o Panache, que podemos utilizar de duas formas:
   - repository: similar ao Spring Data, onde temos uma classe que cuida da iteração com a base de dados (sugerido)
   - entity: a entidade gerencia e provê os métodos de iteração com a base de dados
+
+# Mensagens reativas
+- mensagem é um envelope que carrega um tipo
+- ela pode conter metadas e fornecer métodos de reconhecimento para notificar se o processamento foi bem sucessido ou não.
+- as mensagens transitam nos canais, seja eles uma fila ou topic.
