@@ -251,4 +251,22 @@ getAllUsers()
 ### Outgoing
 - tem tratamento backpressure automaticamente.
 - utilizado via anotação, o retorno do método é embrulhado dentro de uma mensagem
-- e startado quando a aplicação estiver up
+- e iniciado quando a aplicação estiver up
+
+## Consumer
+
+### Incoming
+- utilizada via anotação, recebendo como parâmetro o nome do canal a ser consumido.
+```
+@Incoming("to")
+```
+
+## Processamento ou meio da campo
+- quando combinamos o consumidor com o produtor, ou seja, consumimos um evento, transformamos e enviamos a outro canal 
+```
+    @Outgoing("to")
+    @Incoming("from")
+    Multi<Person> processStream(Multi<String> inputStream) {
+        return inputStream.onItem().transform(Person::new);
+    }
+```
