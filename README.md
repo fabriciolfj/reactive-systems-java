@@ -251,3 +251,4 @@ getAllUsers()
 ### Outgoing
 - tem tratamento backpressure automaticamente.
 - utilizado via anotação, o retorno do método é embrulhado dentro de uma mensagem
+- e startado quando a aplicação estiver up
