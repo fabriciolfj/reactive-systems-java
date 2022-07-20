@@ -234,3 +234,20 @@ getAllUsers()
 - mensagem é um envelope que carrega um tipo
 - ela pode conter metadas e fornecer métodos de reconhecimento para notificar se o processamento foi bem sucessido ou não.
 - as mensagens transitam nos canais, seja eles uma fila ou topic.
+
+## Producer
+- o quarkus reactiver message existem duas formas de produzirmos uma mensagem
+
+### Emitter
+- programamos de forma imperativa mas transmissao e feita de forma reactiva
+- utiliza o buffer como tratamento backpressure.
+
+```
+    @Channel("transaction-approve")
+    @OnOverflow(value = OnOverflow.Strategy.BUFFER)
+    private MutinyEmitter<String> producer;
+
+```
+### Outgoing
+- tem tratamento backpressure automaticamente.
+- utilizado via anotação, o retorno do método é embrulhado dentro de uma mensagem
