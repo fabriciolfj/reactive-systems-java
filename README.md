@@ -252,6 +252,9 @@ getAllUsers()
 - tem tratamento backpressure automaticamente.
 - utilizado via anotação, o retorno do método é embrulhado dentro de uma mensagem
 - e iniciado quando a aplicação estiver up
+```
+@Outgoing("to")
+```
 
 ## Consumer
 
@@ -262,7 +265,7 @@ getAllUsers()
 ```
 
 ## Processamento ou meio da campo
-- quando combinamos o consumidor com o produtor, ou seja, consumimos um evento, transformamos e enviamos a outro canal 
+- combinamos o consumidor com o produtor, ou seja, consumimos um evento, transformamos e enviamos a outro canal 
 ```
     @Outgoing("to")
     @Incoming("from")
@@ -270,3 +273,44 @@ getAllUsers()
         return inputStream.onItem().transform(Person::new);
     }
 ```
+
+# Acknowledgement (reconhecimento)
+- quando trabalhamos com mensageria, o consumir deve informar ao produtor se o recebimento desta foi realizada com sucesso (acked) ou falha (nacked)
+- pois o mesmo pode tomar a decisão de reenviar a mensagem ou manda-la para um dead letter queue(dlq)
+- o ack e emitido quando o consumo e efetivado, no exemplo abaixo o ack é emitido após o print na mensagem (obs: no caso de uma corrente, o ack e disparo pelo ultimo consumidor, e vem replicando a cada consumer)
+
+````
+@ApplicationScoped
+public class HelloMessaging {
+
+    @Outgoing("ticks")
+    public Multi<MyMessage> ticks() {
+        return Multi.createFrom().ticks()
+                .every(Duration.ofSeconds(1))
+                .onOverflow().drop()
+                .onItem().transform(MyMessage::new);
+    }
+
+    @Incoming("ticks")
+    @Outgoing("hello")
+    public Message<String> hello(final Message<String> tick) {
+        return tick.withPayload("Hello " + tick.getPayload());
+    }
+
+    @Incoming("hello")
+    public void print(final String msg) {
+        if (msg.contains("3")) {
+            throw new IllegalArgumentException("boom");
+        }
+
+        System.out.println(msg);
+    }
+}
+````
+- ponto importante: posso trafegar o multi apenas entre os consumers e o ultimo tem que ser o tipo, se o ultimo consumer da cadeia esperar um multi receberá um erro de cast (até o momento ate que acertem esse problema)
+
+## Conectores
+- são componentes específicos que mapeiam um canal para algo gerenciado externamente, como um fila ou tópic
+- são específicos para um protocolo ou tecnologia
+- conectores de entrada: recebem mensagens de canais externos, devem implementar um backpressure do reactive streams e criar uma lógica ack ou nack
+- conectores de sáida: estes enviam as mensagens da app para um componente externo, mapeiam para o formato externo e rastreiam o resultado ack ou nack
