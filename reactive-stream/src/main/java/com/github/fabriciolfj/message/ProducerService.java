@@ -20,7 +20,7 @@ public class ProducerService {
                 .invoke(r -> System.out.println("Valor produzido: " + r));
     }
 
-    @Outgoing("my-channel")
+    //@Outgoing("my-channel")
     Multi<Person> produceAStreamOfPersons() {
         return Multi.createFrom()
                 .items(new Person("Fabricio"), new Person("Suzana"))

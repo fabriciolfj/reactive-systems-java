@@ -234,6 +234,13 @@ getAllUsers()
 - mensagem é um envelope que carrega um tipo
 - ela pode conter metadas e fornecer métodos de reconhecimento para notificar se o processamento foi bem sucessido ou não.
 - as mensagens transitam nos canais, seja eles uma fila ou topic.
+-  Os aplicativos enviam e recebem mensagens. Uma mensagem envolve uma carga útil e pode ser estendida com alguns metadados. Com o conector Kafka, uma mensagem corresponde a um registro Kafka.
+-  As mensagens transitam nos canais. Os componentes do aplicativo se conectam aos canais para publicar e consumir mensagens. O conector Kafka mapeia canais para tópicos Kafka.
+-  Os canais são conectados a back-ends de mensagens usando conectores. Os conectores são configurados para mapear mensagens de entrada para um canal específico (consumido pelo aplicativo) e coletar mensagens de saída enviadas para um canal específico. Cada conector é dedicado a uma tecnologia de mensagens específica. Por exemplo, o conector que lida com Kafka é chamado smallrye-kafka.
+
+# IMPORTANTE
+- os nomes dos canais devem possuir nomes diferentes, por exemplo: @Incoming("prices") e @Outgoing("prices"), não vai compilar.
+- Olhe a configuração de deserialização e serialização
 
 ## Producer
 - o quarkus reactiver message existem duas formas de produzirmos uma mensagem
@@ -275,7 +282,7 @@ getAllUsers()
 ```
 
 # Acknowledgement (reconhecimento)
-- quando trabalhamos com mensageria, o consumir deve informar ao produtor se o recebimento desta foi realizada com sucesso (acked) ou falha (nacked)
+- quando trabalhamos com mensageria, o consumidor deve informar ao produtor se o recebimento desta foi realizada com sucesso (acked) ou falha (nacked)
 - pois o mesmo pode tomar a decisão de reenviar a mensagem ou manda-la para um dead letter queue(dlq)
 - o ack e emitido quando o consumo e efetivado, no exemplo abaixo o ack é emitido após o print na mensagem (obs: no caso de uma corrente, o ack e disparo pelo ultimo consumidor, e vem replicando a cada consumer)
 
@@ -314,3 +321,34 @@ public class HelloMessaging {
 - são específicos para um protocolo ou tecnologia
 - conectores de entrada: recebem mensagens de canais externos, devem implementar um backpressure do reactive streams e criar uma lógica ack ou nack
 - conectores de sáida: estes enviam as mensagens da app para um componente externo, mapeiam para o formato externo e rastreiam o resultado ack ou nack
+
+## Lidando com falhas
+- no quarkus temos algumas estratégias quando lidamos com falhas no kafka, que são:
+
+#### throttled (padrão)
+- monitora / rastreia os registros recebidos de um consumidor.
+- quando a mensagem é processada com sucesso pelo consumidor, o offset e atualizado para o grupo deste.
+
+#### ignorar
+- ignora o compromisso de confirmar a entrega da mensagem
+- indicado para uso sincrono, quando está habilitado o auto.commit=true
+- caso o auto commit esteja falso, qualquer consumidor novo que subir, começará a ouvir as mensagens a partir do offset 0
+
+#### latest
+- atualiza o offset depois que cada mensagem for reconhecida, ou seja, o consumir consumiu a mesma com sucesso
+- gera problemas de desempenho
+
+## Estratégia de falhas com o conector
+
+##### fail fast
+- padrão
+- conector é notificado da falha e o aplicativo consumidor e interrompido
+- se for transitória, a reinicialização resolve, mas se for no aplicativo, entrará em um loop
+
+##### ignore
+- quando não precisamos notificar o produtor que algum deu ruim
+- indicado para aplicativos consumidores que ja lidam com falhas de forma intermitente
+
+##### dlq
+- mensagens com problemas são encaminhadas para outro tópic, afim de serem analisadas ou tratadas, posteriormente.
+- necessita de outro consumir ouvir esse topic dlq para analisar/checar a causa da falha

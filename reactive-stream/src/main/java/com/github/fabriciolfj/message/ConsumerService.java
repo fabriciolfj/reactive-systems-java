@@ -23,7 +23,7 @@ public class ConsumerService {
                 );
     }*/
 
-    @Incoming("my-channel")
+    /*@Incoming("my-channel")
     void consume(final Person person) {
         System.out.println("Consuming: " + person);
     }
@@ -37,5 +37,5 @@ public class ConsumerService {
     @Incoming("to")
     void consumingName(final Person person) {
         System.out.println("Consumindo persons: " + person);
-    }
+    }*/
 }

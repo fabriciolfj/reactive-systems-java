@@ -22,13 +22,13 @@ public class RetryExample {
 
     @Incoming("ticks")
     @Outgoing("Hello")
-    @Retry(maxRetries = 10, delay = 1, delayUnit = ChronoUnit.SECONDS)
-    public String hello(final Long id) {
-        if (id == 3L) {
+    //@Retry(maxRetries = 10, delay = 1, delayUnit = ChronoUnit.SECONDS)
+    public Multi<String> hello(final Long id) {
+        /*if (id == 3L) {
             throw new IllegalArgumentException();
-        }
+        }*/
 
-        return id.toString();
+        return Multi.createFrom().items(id.toString());
     }
 
     @Incoming("Hello")

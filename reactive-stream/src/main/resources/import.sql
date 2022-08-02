@@ -7,3 +7,6 @@ INSERT INTO orders(id, customerId, description, total) VALUES (nextval('hibernat
 INSERT INTO orders(id, customerId, description, total) VALUES (nextval('hibernate_sequence'), 1, 'Curtains', 240.98);
 INSERT INTO orders(id, customerId, description, total) VALUES (nextval('hibernate_sequence'), 2, 'BBQ Grill', 183.99);
 INSERT INTO orders(id, customerId, description, total) VALUES (nextval('hibernate_sequence'), 3, '6 seater dining table', 1344.99);
+
+
+
