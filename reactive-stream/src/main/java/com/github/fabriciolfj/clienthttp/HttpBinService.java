@@ -3,12 +3,14 @@ package com.github.fabriciolfj.clienthttp;
 import com.github.fabriciolfj.Person;
 import com.github.fabriciolfj.UUID;
 import io.smallrye.mutiny.Uni;
-import org.eclipse.microprofile.faulttolerance.*;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.time.temporal.ChronoUnit;
 
 @RegisterRestClient(configKey = "httpbin")
