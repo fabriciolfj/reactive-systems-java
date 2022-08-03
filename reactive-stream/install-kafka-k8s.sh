@@ -1,0 +1,1 @@
+helm install kafka bitnami/kafka --set replicaCount=2 --set numPartitions=9

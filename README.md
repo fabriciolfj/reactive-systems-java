@@ -352,3 +352,98 @@ public class HelloMessaging {
 ##### dlq
 - mensagens com problemas são encaminhadas para outro tópic, afim de serem analisadas ou tratadas, posteriormente.
 - necessita de outro consumir ouvir esse topic dlq para analisar/checar a causa da falha
+
+# Client rest
+- o quarkus oferece a api client rest reativa
+- diferentes de outros clients, que usam um pool de threads e são bloqueantes, esta é reativa, mas podemos fazer uso de forma bloqueante
+
+## Resiliência no client rest
+- lidar com falhas na chamada de serviços remotos e obrigatório
+- quarkus oferece alguns recursos atráves da lib smallrye-fault-tolerance (funciona para modelo reactive e imperativo)
+- modemos em vez de utilizar a lib salientada acima, os recursos do mutiny
+- abaixo alguns recursos oferecidos pela lib smallrye-fault-tolerance
+
+### fallback
+- oferece um resultado alternativo caso ocorra alguma falha na api
+- exemplo:
+````
+    @GET
+    @Path("/uuid")
+    @Fallback(fallbackMethod = "fallback")
+    Uni<UUID> getUUID();
+    //Uni<Response> getUUID();
+
+    default Uni<UUID> fallback() {
+        var u = new UUID();
+        u.uuid = java.util.UUID.randomUUID().toString();
+        return Uni.createFrom().item(u);
+    }
+````
+- caso precise de mais detalhes, podemos utilizar um handler:
+````
+    @GET
+    @Path("/uuid")
+    @Fallback(value =  MyFallback.class)
+    Uni<UUID> getUUID();
+    //Uni<Response> getUUID();
+
+    class MyFallback implements FallbackHandler<Uni<UUID>> {
+
+        @Override
+        public Uni<UUID> handle(ExecutionContext executionContext) {
+            System.out.println(executionContext.getFailure());
+            var u = new UUID();
+            u.uuid = java.util.UUID.randomUUID().toString();
+            return Uni.createFrom().item(u);
+        }
+    }
+````
+
+### retries
+- processo de retantativa diante a falhas
+- utilize para contextos idempotentes
+
+### timeout
+- quando uma operação remota não respondeu em tempo hábil
+````
+    @GET
+    @Path("/uuid")
+    //@Retry(maxRetries = 3, delay = 10000, jitter = 100)
+    @Timeout(value = 3, unit = ChronoUnit.SECONDS)
+    @Fallback(value =  MyFallback.class)
+    Uni<UUID> getUUID();
+````
+### circuit breaker
+- permite que a chamada ao serviço remoto falhe rápido
+- evita ficar efetuando chamadas ao serviço remoto que esteja insalubre
+- quando o circuit está fechado, esse é o ambiente normal, efetuando chamadas ao serviço remoto
+- quando o circuit está aberto, emitirá uma falha
+- quando o circuit está meio aberto, ele tenta algumas vezes chamar o serviço real, caso de falha, volte para aberto ou se houver sucesso, vai para fechado.
+
+`````
+    @GET
+    @Path("/uuid")
+    //@Retry(maxRetries = 3, delay = 10000, jitter = 100)
+    //@Timeout(value = 3, unit = ChronoUnit.SECONDS)
+    //@Fallback(value =  MyFallback.class)
+    @CircuitBreaker(
+            delayUnit = ChronoUnit.SECONDS,
+            //tempo para mudar para semi aberto
+            delay = 10,
+            //quantidade de requisições com sucesso durante a janela semi-aberta, para fechar o circuito
+            successThreshold = 2,
+            //percentual de requisições com base no volume informado abaixo, para abre o circuito
+            failureRatio = 0.75,
+            requestVolumeThreshold = 10
+    )
+    Uni<UUID> getUUID();
+
+`````
+
+### bulkheads
+- objetivo deste padrão é limitar a propagação de erros
+- limita o número de solicitações simultâneas ao serviço remoto
+`````
+    @Bulkhead(value = 2 (numero maximo de solicitações simultâneas), waitingTaskQueue = 10000 (quantidade máxima de solicitações esperando sua vez, passou desse valor, ele rejeitará))
+    Uni<UUID> getUUID();
+`````
