@@ -1,0 +1,7 @@
+org/acme/http/model/Order.class
+org/acme/http/OrderEndpoint.class
+org/acme/http/ValidationService.class
+META-INF/panache-archive.marker
+org/acme/http/validation/ValidationEndpoint.class
+org/acme/http/OrderProcessing.class
+org/acme/http/OrderStorage.class

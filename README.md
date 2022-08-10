@@ -358,13 +358,13 @@ public class HelloMessaging {
 - diferentes de outros clients, que usam um pool de threads e são bloqueantes, esta é reativa, mas podemos fazer uso de forma bloqueante
 
 ## Resiliência no client rest
-- lidar com falhas na chamada de serviços remotos e obrigatório
+- lidar com falhas na chamada de serviços remotos é obrigatório
 - quarkus oferece alguns recursos atráves da lib smallrye-fault-tolerance (funciona para modelo reactive e imperativo)
-- modemos em vez de utilizar a lib salientada acima, os recursos do mutiny
+- em vez de utilizar a lib salientada acima, podemos utilizar os recursos do mutiny
 - abaixo alguns recursos oferecidos pela lib smallrye-fault-tolerance
 
 ### fallback
-- oferece um resultado alternativo caso ocorra alguma falha na api
+- oferece um resultado alternativo caso ocorra alguma falha na api principal
 - exemplo:
 ````
     @GET
@@ -418,7 +418,7 @@ public class HelloMessaging {
 - evita ficar efetuando chamadas ao serviço remoto que esteja insalubre
 - quando o circuit está fechado, esse é o ambiente normal, efetuando chamadas ao serviço remoto
 - quando o circuit está aberto, emitirá uma falha
-- quando o circuit está meio aberto, ele tenta algumas vezes chamar o serviço real, caso de falha, volte para aberto ou se houver sucesso, vai para fechado.
+- quando o circuit está meio aberto, ele tenta algumas vezes chamar o serviço real, caso falhe, ele volta para aberto ou se houver sucesso, vai para fechado.
 
 `````
     @GET
@@ -432,7 +432,7 @@ public class HelloMessaging {
             delay = 10,
             //quantidade de requisições com sucesso durante a janela semi-aberta, para fechar o circuito
             successThreshold = 2,
-            //percentual de requisições com base no volume informado abaixo, para abre o circuito
+            //percentual de requisições com base no volume informado abaixo, para abrir o circuito
             failureRatio = 0.75,
             requestVolumeThreshold = 10
     )
@@ -447,3 +447,44 @@ public class HelloMessaging {
     @Bulkhead(value = 2 (numero maximo de solicitações simultâneas), waitingTaskQueue = 10000 (quantidade máxima de solicitações esperando sua vez, passou desse valor, ele rejeitará))
     Uni<UUID> getUUID();
 `````
+
+# Telemetria
+- consiste em qualquer informação que coletamos de processos com o propósito de observar um sistema
+- Tipos de telemetria:
+  - logs: mensagens textuais, geralmente escritas na saído do console ou exportadas em um formato json
+  - metrics: mede uma informação específica, como solicitações de servidor http. Existem vários tipos, como: medidor, contador, temporizador e etc.
+  - traces: representa uma única solicitação através de um sistema, dividido em operações específicas. 
+
+## Monitoração vs observabilidade
+- monitoramento é direcionado a métricas, e comparado a um objetivo. Por exemplo: pedido negado com falha so pode ter no máximo 1, ocorreu emite um alerta
+- observabilidade: analisa o comportamento da aplicação, prevê tendências
+
+# kubernetes
+## Verificação de vivacidade do pod
+- liveness probe: verifica se o pod precisa ser reiniciado
+- readiness probe: se o pod pode receber requisições
+- startup probe: tempo para a aplicação ficar up
+- para atender esses pontos, existe a dependência abaixo:
+````
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+````
+
+## Metricas
+- para expor métricas no formato prometheus, podemos utilizar a lib abaixo:
+````
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
+    </dependency>
+````
+- para expor span/traces, utilizamos:
+- e indicamos o local do servidor jaeger: quarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://simplest-collector.jaeger:14250
+````
+   <dependency>
+      <groupId>io.quarkus</groupId>
+     <artifactId>quarkus-opentelemetry-exporter-jaeger</artifactId>
+   </dependency>
+````

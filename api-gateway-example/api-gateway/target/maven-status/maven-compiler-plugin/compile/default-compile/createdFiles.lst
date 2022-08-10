@@ -1,0 +1,5 @@
+org/acme/gateway/GreetingService.class
+org/acme/gateway/GreetingService$GreetingFallback.class
+org/acme/gateway/QuoteService.class
+org/acme/gateway/Gateway$Greeting.class
+org/acme/gateway/Gateway.class
